@@ -1,2 +1,13 @@
 server:
     port: 8090
+
+chatbot-api:
+  launchList: group01 # 启动几组，就配置几组
+  group01:
+    groupName: chatai 问答助手
+    groupId: 51111554848824 # 知识星球ID
+    cookie:  zsxq_access_token=17701C73-613F-5466-07BD-FD1EC95BC6F0_6531F5B6A146C2AE; abtest_env=beta; zsxqsessionid=56650accd6eaa376e3c76a45a803c0c2; sensorsdata2015jssdkcross=%7B%22distinct_id%22%3A%22415544241842448%22%2C%22first_id%22%3A%2219113ed0eb862-0cba0c3877ad68-e5d5628-1821369-19113ed0eb917a7%22%2C%22props%22%3A%7B%7D%2C%22identities%22%3A%22eyIkaWRlbnRpdHlfY29va2llX2lkIjoiMTkxMTNlZDBlYjg2Mi0wY2JhMGMzODc3YWQ2OC1lNWQ1NjI4LTE4MjEzNjktMTkxMTNlZDBlYjkxN2E3IiwiJGlkZW50aXR5X2xvZ2luX2lkIjoiNDE1NTQ0MjQxODQyNDQ4In0%3D%22%2C%22history_login_id%22%3A%7B%22name%22%3A%22%24identity_login_id%22%2C%22value%22%3A%22415544241842448%22%7D%7D; sajssdk_2015_cross_new_user=1
+    # 知识星球个人cookie信息
+    openAiKey:  # 自行申请 https://beta.openai.com/overview 或者联系小傅哥 fustack 付费申请【购买虚拟号码等需要支付】。
+    cronExpression: 0/30 * * * * ? # 执行的频次配置，参考：cron.qqe2.com
+    silenced: false
