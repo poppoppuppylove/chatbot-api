@@ -1,6 +1,7 @@
 package cn.bugstack.chatbot.api.domain.zsxq.service;
 
 import cn.bugstack.chatbot.api.domain.zsxq.IZsxqApi;
+import cn.bugstack.chatbot.api.domain.zsxq.model.aggregates.UnAnsweredCommentsAggregates;
 import cn.bugstack.chatbot.api.domain.zsxq.model.aggregates.UnAnsweredQuestionsAggregates;
 import cn.bugstack.chatbot.api.domain.zsxq.model.req.AnswerReq;
 import cn.bugstack.chatbot.api.domain.zsxq.model.req.ReqData;
@@ -34,10 +35,10 @@ public class ZsxqApi implements IZsxqApi {
     private Logger logger = LoggerFactory.getLogger(ZsxqApi.class);
 
     @Override
-    public UnAnsweredQuestionsAggregates queryUnAnsweredQuestionsTopicId(String groupId, String cookie) throws IOException {
+    public UnAnsweredCommentsAggregates queryUnAnsweredCommentsTopicId(String groupId, String cookie) throws IOException {
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
-        HttpGet get = new HttpGet("https://api.zsxq.com/v2/groups/" + groupId + "/topics?scope=unanswered_questions&count=20");
+        HttpGet get = new HttpGet("https://api.zsxq.com/v2/groups/" + groupId + "/topics?scope=digests&count=20");
 
         get.addHeader("cookie", cookie);
         get.addHeader("Content-Type", "application/json;charset=utf8");
@@ -46,9 +47,9 @@ public class ZsxqApi implements IZsxqApi {
         if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
             String jsonStr = EntityUtils.toString(response.getEntity());
             logger.info("拉取提问数据。groupId：{} jsonStr：{}", groupId, jsonStr);
-            return JSON.parseObject(jsonStr, UnAnsweredQuestionsAggregates.class);
+            return JSON.parseObject(jsonStr, UnAnsweredCommentsAggregates.class);
         } else {
-            throw new RuntimeException("queryUnAnsweredQuestionsTopicId Err Code is " + response.getStatusLine().getStatusCode());
+            throw new RuntimeException("queryUnAnsweredCommentsTopicId Err Code is " + response.getStatusLine().getStatusCode());
         }
     }
 
@@ -57,7 +58,7 @@ public class ZsxqApi implements IZsxqApi {
 
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
-        HttpPost post = new HttpPost("https://api.zsxq.com/v2/topics/" + topicId + "/answer");
+        HttpPost post = new HttpPost("https://api.zsxq.com/v2/topics/" + topicId + "/comments");
         post.addHeader("cookie", cookie);
         post.addHeader("Content-Type", "application/json;charset=utf8");
         post.addHeader("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36");
@@ -85,6 +86,7 @@ public class ZsxqApi implements IZsxqApi {
             logger.info("回答问题结果。groupId：{} topicId：{} jsonStr：{}", groupId, topicId, jsonStr);
             AnswerRes answerRes = JSON.parseObject(jsonStr, AnswerRes.class);//将响应字符串解析为Java对象，方便代码中的逻辑处理和数据访问
             //直接从字符串变成AnswerRes对象是不可行的，因为字符串只是纯文本数据，无法直接映射为Java对象。必须先将字符串解析为JSON对象，然后才能转换为对应的Java对象
+            //出错原因：搜索回答与否不能满足条件，应该是和评论有关
             return answerRes.isSucceeded();
         } else {
             throw new RuntimeException("answer Err Code is " + response.getStatusLine().getStatusCode());

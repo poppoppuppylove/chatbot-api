@@ -1,4 +1,4 @@
-package cn.bugstack.chatbot.api;
+package cn.bugstack.chatbot.api.test;
 
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -21,7 +21,7 @@ import java.util.Base64;
  * @github https://github.com/fuzhengwei
  * @Copyright 公众号：bugstack虫洞栈 | 博客：https://bugstack.cn - 沉淀、分享、成长，让自己和他人都能有所收获！
  */
-public class ApiTest {
+public class ApiTest1 {
 
     @Test
     public void base64(){
